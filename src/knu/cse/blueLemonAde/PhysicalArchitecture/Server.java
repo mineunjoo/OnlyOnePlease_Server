@@ -6,8 +6,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Queue;
-
 import knu.cse.blueLemonAde.Foundation.RoomList;
 import knu.cse.blueLemonAde.Foundation.WaitingQueue;
 import knu.cse.blueLemonAde.ProblemDomain.Constants;
@@ -33,7 +31,7 @@ public class Server extends Thread
 		clientNumber = 0;
 		
 		roomList = new RoomList();
-		waitingQueue = new WaitingQueue(Constants.TOP);
+		waitingQueue = new WaitingQueue(Constants.TOP, 0);
 	}
 	
 	public void run() {
@@ -63,6 +61,10 @@ public class Server extends Thread
 	public RoomList getRoomList() {
 		return roomList;
 	}
+	
+	public WaitingQueue getWaitingQueue() {
+		return waitingQueue;
+	}
 }
 
 class EchoThread extends Thread { 
@@ -73,8 +75,8 @@ class EchoThread extends Thread {
 	private int clientNumber;
 	private Server server;
 	
-	ObjectOutputStream serverOutputStream;
-	ObjectInputStream in;
+	private ObjectOutputStream serverOutputStream;
+	private ObjectInputStream in;
 
 	private ServerConsole serverConsole; 
 
@@ -93,6 +95,10 @@ class EchoThread extends Thread {
 		return serverOutputStream;
 	}
 
+	public ServerConsole getServerConsole() {
+		return serverConsole;
+	}
+	
 	public void run() { 
 		try { 
 			InetAddress inetaddr = sock.getInetAddress();

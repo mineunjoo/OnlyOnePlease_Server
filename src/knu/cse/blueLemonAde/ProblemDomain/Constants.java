@@ -1,37 +1,34 @@
 package knu.cse.blueLemonAde.ProblemDomain;
 
+/**
+ * @author jm
+ * enum constants and other constants for server
+ */
 public class Constants {
-	
-	public static final int TOP = 0;
+	// TODO Category survey required.
 
-	public static enum Category{
-		BUNSIC(1),
-		CHICKEN(2),
-		PIZZA(3),
-		CHAINESE(4),
-		JOCBO(5),
-		NIGHT(6),
-		FAST(7),
-		DOSIRAC(8);
-		
-		public int type;
-		
-		Category(int type) {
-			this.type = type;
-		}
-	};
+	public final static int TOP = 0;
+	public final static int CATEGORY = 1;
+	public final static int BRAND = 2;
+	public final static int MENU = 3;
 	
-	static enum BUNSIC{
-		
+	public static enum STATE{
+		NONE, WAIT, 
 	}
 	
-	public static enum CHICKEN{
-		KFC,
-		KYOCHON,
-		NENE;
+	public static enum Category {
+		BUNSIC, CHICKEN, PIZZA, CHAINESE, JOCBO, NIGHT, FAST, DOSIRAC;
 	}
-	
-	public static enum KFC{
+
+	static enum BUNSIC {
+
+	}
+
+	public static enum CHICKEN {
+		KFC, KYOCHON, NENE;
+	}
+
+	public static enum KFC {
 		HOT;
 	}
 }
