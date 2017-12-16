@@ -13,22 +13,44 @@ public class Constants {
 	public final static int MENU = 3;
 	
 	public static enum STATE{
-		NONE, WAIT, 
+		NONE, WAIT,  
 	}
 	
 	public static enum Category {
-		BUNSIC, CHICKEN, PIZZA, CHAINESE, JOCBO, NIGHT, FAST, DOSIRAC;
+		/* BUNSIC, */ 치킨, 피자; /*, CHAINESE, JOCBO, NIGHT, FAST, DOSIRAC;*/
 	}
 
+	/*
 	static enum BUNSIC {
-
+		
 	}
-
+	 */
+	
 	public static enum CHICKEN {
-		KFC, KYOCHON, NENE;
+		KFC, 교촌, 네네;
 	}
 
 	public static enum KFC {
-		HOT;
+		스파이시, 후라이드, 양념;
+	}
+	
+	public static enum KYOCHON {
+		핫, 간장, 후라이드;
+	}
+	
+	public static enum NENE {
+		핫스파이시, 후라이드, 스노윙;
+	}
+	
+	public static enum PIZZA {
+		피자헛, 미스터피자;
+	}
+
+	public static enum PIZZAHUT {
+		불고기, 콤비네이션;
+	}
+	
+	public static enum MISTER {
+		쉬림프, 골드;
 	}
 }

@@ -11,7 +11,7 @@ import knu.cse.blueLemonAde.ProblemDomain.Constants.*;
  * @author jm waiting user queue.
  */
 public class WaitingQueue {
-	private int level; // this waitingQueue level (ex : TOP(0), CATEGORY(1), BRAND(2)...
+	private int level; // this is waitingQueue level (ex : TOP(0), CATEGORY(1), BRAND(2)...
 	private int type; // this is typeID (ex) CATEGORY-CHICKEN, BRAND-KFC...
 
 	private ArrayList<Integer> waitingQueue; // waiting queue of under type and this type
@@ -71,4 +71,55 @@ public class WaitingQueue {
 				waitingQueue.remove(userID);
 		}
 	}
+
+	public void printQueue() {
+		ArrayList<WaitingQueue> queue = new ArrayList<WaitingQueue>();
+		
+		if(level == Constants.TOP){
+			printEnqueue(queue);
+		}
+	}
+	
+	private void printEnqueue(ArrayList<WaitingQueue> queue){
+		int currentLevel = Constants.TOP;
+		
+		queue.add(this);
+		
+		for(int i=0; i<underWaitingQueueList.size(); i++)
+			underWaitingQueueList.get(i).printEnqueue(queue);
+		
+		for(int i=0; i<queue.size(); i++){
+			if(currentLevel != queue.get(i).level){
+				currentLevel = queue.get(i).level;
+				System.out.println();
+			}
+			System.out.println(queue.get(i).toString());
+		}
+	}
+
+	@Override
+	public String toString() {
+		String level = "";
+		String type = "";
+		
+		if(this.level == Constants.TOP)
+			level = "TOP";
+		else if(this.level == Constants.CATEGORY)
+			level = "CATEGORY";
+		else if(this.level == Constants.BRAND)
+			level = "BRAND";
+		
+		if(this.type == Constants.TOP)
+			level = "TOP";
+		else if(this.type == Constants.CATEGORY)
+			level = "CATEGORY";
+		else if(this.type == Constants.BRAND)
+			level = "BRAND";
+		
+		
+		
+		return "WaitingQueue [level=" + level + ", type=" + type + ", waitingQueue=" + waitingQueue + "]";
+	}
+	
+	
 }

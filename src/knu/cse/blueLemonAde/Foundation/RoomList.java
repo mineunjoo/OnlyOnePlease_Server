@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import knu.cse.blueLemonAde.ProblemDomain.Room;
 
 /**
- * @author jm showed room in waiting queue. user can see all or specific
- *         category room
+ * @author jm 
+ * room list of waiting queue. user can see all or specific category room
  */
 public class RoomList {
 	private ArrayList<Room> roomList;
