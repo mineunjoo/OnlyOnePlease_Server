@@ -28,7 +28,7 @@ public class Room {
 	 */
 	
 	public int getCategory() {
-		if(typeID.length > 0)
+		if(typeID[0] != -1)
 			return typeID[0];
 		else return -1;
 	}
@@ -38,7 +38,7 @@ public class Room {
 	}
 
 	public int getBrand() {
-		if(typeID.length > 1)
+		if(typeID[1] != -1)
 			return typeID[1];
 		else return -1;
 	}
@@ -48,7 +48,7 @@ public class Room {
 	}
 
 	public int getMenu() {
-		if(typeID.length > 2)
+		if(typeID[2] != -1)
 			return typeID[2];
 		else return -1;
 	}

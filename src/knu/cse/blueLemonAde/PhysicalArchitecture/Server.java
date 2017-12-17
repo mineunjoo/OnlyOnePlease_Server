@@ -10,34 +10,49 @@ import knu.cse.blueLemonAde.Foundation.RoomList;
 import knu.cse.blueLemonAde.Foundation.WaitingQueue;
 import knu.cse.blueLemonAde.ProblemDomain.Constants;
 
-/*
+/**
+ * @author zzizzh
  * main server. It has roomList and client list.
  */
 public class Server {
 	private static final String Conatants = null;
-	private ServerSocket deliveryManSocket;
 	private int userPort;
 	private int deliveryManPort;
 
 	private static int userNumber = 0;
 	private static int deliveryManNumber = 0;
 
-	private static ArrayList<UserThread> userClientList;
-	private static ArrayList<DeliveryManThread> deliveryManClientList;
+	private static ArrayList<UserThread> userClientList; // 연결된 주문 배달 앱 사용자
+															// 클라이언트 리스트
+	private static ArrayList<DeliveryManThread> deliveryManClientList; // 연결된
+																		// 배달원
+																		// 클라이언트
+																		// 리스트
 
-	private RoomList roomList;
-	private WaitingQueue waitingQueue;
+	private RoomList roomList; // 현재 만들어진 방
+	private WaitingQueue waitingQueue; // 매칭 대기열 큐
 
-	private UserAcceptThread userAccept;
-	private DeliveryManAcceptThread deliveryManAccept;
+	private UserAcceptThread userAccept; // 사용자 클라이언트 accept 스레드
+	private DeliveryManAcceptThread deliveryManAccept; // 배달원 클라이언트 accept 스레드
+
 	
+	/**
+	 * @param userPort						
+	 * @param deliveryManPort
+	 */
 	public Server(int userPort, int deliveryManPort) {
 		userClientList = new ArrayList<UserThread>();
+		deliveryManClientList = new ArrayList<DeliveryManThread>();
 
 		roomList = new RoomList();
 		waitingQueue = new WaitingQueue(Constants.TOP, 0);
-	}
 
+		userAccept = new UserAcceptThread(userPort, this);
+		userAccept.start();
+
+		deliveryManAccept = new DeliveryManAcceptThread(deliveryManPort, this);
+		deliveryManAccept.start();
+	}
 
 	static ArrayList<UserThread> getUserThreadList() {
 		return userClientList;
@@ -62,6 +77,7 @@ public class Server {
 		int userPort;
 
 		private Socket userSock;
+
 		public Socket getUserSocket() {
 			return userSock;
 		}
@@ -79,7 +95,7 @@ public class Server {
 
 				while (true) {
 					userSock = userSocket.accept();
-					UserThread userthread = new UserThread(server, userNumber++);
+					UserThread userthread = new UserThread(server, userSock, userNumber++);
 					userthread.start();
 
 					userClientList.add(userthread);
@@ -93,7 +109,7 @@ public class Server {
 
 	class DeliveryManAcceptThread extends Thread {
 
-		private ServerSocket deliveryManSocket;
+		private ServerSocket acceptSocket;
 		int deliveryManNumber = 0;
 		Server server;
 		int deliveryManPort;
@@ -103,7 +119,7 @@ public class Server {
 		public Socket getDeliveryManSocket() {
 			return deliveryManSock;
 		}
-		
+
 		public DeliveryManAcceptThread(int deliveryManPort, Server server) {
 			super();
 			this.deliveryManPort = deliveryManPort;
@@ -113,11 +129,12 @@ public class Server {
 		@Override
 		public void run() {
 			try {
-				deliveryManSocket = new ServerSocket(deliveryManPort);
+				acceptSocket = new ServerSocket(deliveryManPort);
 
 				while (true) {
-					deliveryManSock = deliveryManSocket.accept();
-					DeliveryManThread deliveryManThread = new DeliveryManThread(server, deliveryManNumber++);
+					deliveryManSock = acceptSocket.accept();
+					DeliveryManThread deliveryManThread = new DeliveryManThread(server, deliveryManSock,
+							deliveryManNumber++);
 					deliveryManThread.start();
 
 					deliveryManClientList.add(deliveryManThread);
@@ -130,7 +147,6 @@ public class Server {
 	}
 
 	class UserThread extends Thread {
-		private ArrayList<UserThread> clientList;
 
 		private RoomList roomList;
 		private WaitingQueue waitingQueue;
@@ -145,8 +161,8 @@ public class Server {
 
 		private ServerConsole serverConsole;
 
-		public UserThread(Server server, int userid) {
-			sock = server.userAccept.getUserSocket();
+		public UserThread(Server server, Socket socket, int userid) {
+			sock = socket;
 			this.userid = userid;
 			Server.getUserThreadList().add(this);
 			activeCount = Server.getUserThreadList().size();
@@ -194,17 +210,15 @@ public class Server {
 			} catch (Exception ex) {
 				activeCount--;
 				System.out.println(ex);
-				clientList = Server.getUserThreadList();
-				for (int i = 0; i < clientList.size(); i++) {
-					if (userid == clientList.get(i).getUserid())
-						clientList.remove(i);
+				for (int i = 0; i < userClientList.size(); i++) {
+					if (userid == userClientList.get(i).getUserid())
+						userClientList.remove(i);
 				}
 			}
 		}
 	}
 
 	class DeliveryManThread extends Thread {
-		private ArrayList<UserThread>  List;
 
 		private RoomList roomList;
 		private WaitingQueue waitingQueue;
@@ -219,10 +233,9 @@ public class Server {
 
 		private ServerConsole serverConsole;
 
-		public DeliveryManThread(Server server, int deliveryManid) {
-			sock = server.deliveryManAccept.getDeliveryManSocket();
+		public DeliveryManThread(Server server, Socket deliveryManSock, int deliveryManid) {
+			sock = deliveryManSock;
 			this.deliveryManid = deliveryManid;
-			Server.getDeliveryThreadList().add(this);
 			activeCount = Server.getDeliveryThreadList().size();
 		}
 
@@ -268,7 +281,6 @@ public class Server {
 			} catch (Exception ex) {
 				activeCount--;
 				System.out.println(ex);
-				deliveryManClientList = Server.getDeliveryThreadList();
 				for (int i = 0; i < deliveryManClientList.size(); i++) {
 					if (deliveryManid == deliveryManClientList.get(i).getUserid())
 						deliveryManClientList.remove(i);
