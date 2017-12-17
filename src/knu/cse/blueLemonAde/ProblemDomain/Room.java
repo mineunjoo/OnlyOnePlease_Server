@@ -3,7 +3,7 @@ package knu.cse.blueLemonAde.ProblemDomain;
 public class Room {
 	private int roomNum;
 	private int userID;
-	private int guestID;
+	private int guestID = -1;
 	
 	private int[] typeID;
 	

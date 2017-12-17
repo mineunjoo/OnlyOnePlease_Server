@@ -46,6 +46,7 @@ public class Server {
 
 		roomList = new RoomList();
 		waitingQueue = new WaitingQueue(Constants.TOP, 0);
+		waitingQueue.printQueue();
 
 		userAccept = new UserAcceptThread(userPort, this);
 		userAccept.start();
@@ -54,11 +55,11 @@ public class Server {
 		deliveryManAccept.start();
 	}
 
-	static ArrayList<UserThread> getUserThreadList() {
+	static ArrayList<UserThread> getUserClientList() {
 		return userClientList;
 	}
 
-	static ArrayList<DeliveryManThread> getDeliveryThreadList() {
+	static ArrayList<DeliveryManThread> getDeliveryClientList() {
 		return deliveryManClientList;
 	}
 
@@ -91,7 +92,7 @@ public class Server {
 		@Override
 		public void run() {
 			try {
-				userSocket = new ServerSocket(deliveryManPort);
+				userSocket = new ServerSocket(userPort);
 
 				while (true) {
 					userSock = userSocket.accept();
@@ -162,10 +163,11 @@ public class Server {
 		private ServerConsole serverConsole;
 
 		public UserThread(Server server, Socket socket, int userid) {
+			this.server = server;
 			sock = socket;
 			this.userid = userid;
-			Server.getUserThreadList().add(this);
-			activeCount = Server.getUserThreadList().size();
+			userClientList.add(this);
+			activeCount = userClientList.size();
 		}
 
 		public int getUserid() {
@@ -183,7 +185,7 @@ public class Server {
 		public void run() {
 			try {
 				InetAddress inetaddr = sock.getInetAddress();
-				System.out.println(inetaddr.getHostAddress() + " �κ��� �����Ͽ����ϴ�.");
+				System.out.println(inetaddr.getHostAddress() + " 에서 유저 클랑이언트 접속.");
 				serverOutputStream = new ObjectOutputStream(sock.getOutputStream());
 				in = new ObjectInputStream(sock.getInputStream());
 				serverConsole = new ServerConsole(server, serverOutputStream, userid);
@@ -236,7 +238,7 @@ public class Server {
 		public DeliveryManThread(Server server, Socket deliveryManSock, int deliveryManid) {
 			sock = deliveryManSock;
 			this.deliveryManid = deliveryManid;
-			activeCount = Server.getDeliveryThreadList().size();
+			activeCount = deliveryManClientList.size();
 		}
 
 		public int getUserid() {

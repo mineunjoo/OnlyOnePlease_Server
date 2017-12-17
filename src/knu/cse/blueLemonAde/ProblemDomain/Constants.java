@@ -6,28 +6,25 @@ package knu.cse.blueLemonAde.ProblemDomain;
  */
 public class Constants {
 	// TODO Category survey required.
-
+	// waitingQueue level
 	public final static int TOP = 0;
 	public final static int CATEGORY = 1;
 	public final static int BRAND = 2;
 	public final static int MENU = 3;
 	
-	public static enum userState{
-		NONE, WAIT_MATCHING, TALKING, WAIT_SELECT, WAIT_PAY, WAIT_DELIVERY;  
-	}
-	
-	public static enum roomState{
-		WAIT, 
-	}
-	
-	public static enum orderState{
-		WAITING, DELIVERYING, COMPLETE;
-	}
-	
-	public static enum deliveryManState{
-		NONE, 
-	}
-	
+	// user state
+	public final static int NONE 			= 0;	// order & delivery also use this 
+	public final static int WAIT_MATCHING 	= 1;
+	public final static int TALKING 		= 2;
+	public final static int WAIT_SELECT 	= 3;
+	public final static int WAIT_PAY 		= 4;
+	public final static int WAIT_DELIVERY 	= 5;  
+
+	// order & delivery man state
+	public final static int WAITING 	= 1;
+	public final static int DELIVERYING = 2;
+	public final static int COMPLETE 	= 3;
+
 	public static enum Category {
 		/* BUNSIC, */ 치킨(0), 피자(1); /*, CHAINESE, JOCBO, NIGHT, FAST, DOSIRAC;*/
 		public int value;
@@ -53,7 +50,7 @@ public class Constants {
 	}
 
 	public static enum PIZZA {
-		피자헛(3), 미스터피자(4);
+		피자헛(0), 미스터피자(1);
 		public int value;
 		
 		PIZZA(int value){
@@ -71,7 +68,7 @@ public class Constants {
 	}
 	
 	public static enum KYOCHON {
-		핫(3), 간장(4), 후라이드(5);
+		핫(0), 간장(1), 후라이드(2);
 		public int value;
 		
 		KYOCHON(int value){
@@ -80,7 +77,7 @@ public class Constants {
 	}
 	
 	public static enum NENE {
-		핫스파이시(6), 후라이드(7), 스노윙(8);
+		핫스파이시(0), 후라이드(1), 스노윙(2);
 		public int value;
 		
 		NENE(int value){
@@ -90,7 +87,7 @@ public class Constants {
 
 
 	public static enum PIZZAHUT {
-		불고기(9), 콤비네이션(10);
+		불고기(0), 콤비네이션(1);
 		public int value;
 		
 		PIZZAHUT(int value){
@@ -99,7 +96,7 @@ public class Constants {
 	}
 	
 	public static enum MISTERPIZZA {
-		쉬림프(11), 골드(12);
+		쉬림프(0), 골드(1);
 		public int value;
 		
 		MISTERPIZZA(int value){
