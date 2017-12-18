@@ -54,24 +54,20 @@ public class WaitingQueue {
 				}
 			}
 		} else if (level == Constants.BRAND) {
-			if (type[1] == CHICKEN.KFC.value) {
-				for (KFC menu : KFC.values()) {
+			if (type[1] == CHICKEN.BBQ.value) {
+				for (BBQ menu : BBQ.values()) {
 					underWaitingQueueList.add(new WaitingQueue(level + 1, 0, type[0], type[1], menu.value));
 				}
-			} else if (type[1] == CHICKEN.교촌.value) {
-				for (KYOCHON menu : KYOCHON.values()) {
-					underWaitingQueueList.add(new WaitingQueue(level + 1, 0, type[0], type[1], menu.value));
-				}
-			} else if (type[1] == CHICKEN.네네.value) {
+			} else if (type[1] == CHICKEN.네네치킨.value) {
 				for (NENE menu : NENE.values()) {
 					underWaitingQueueList.add(new WaitingQueue(level + 1, 0, type[0], type[1], menu.value));
 				}
-			} else if (type[1] == PIZZA.피자헛.value) {
-				for (PIZZAHUT menu : PIZZAHUT.values()) {
+			} else if (type[1] == PIZZA.네오피자.value) {
+				for (NEOPIZZA menu : NEOPIZZA.values()) {
 					underWaitingQueueList.add(new WaitingQueue(level + 1, 0, type[0], type[1], menu.value));
 				}
-			} else if (type[1] == PIZZA.미스터피자.value) {
-				for (MISTERPIZZA menu : MISTERPIZZA.values()) {
+			} else if (type[1] == PIZZA.피자빙고.value) {
+				for (PIZZABINGO menu : PIZZABINGO.values()) {
 					underWaitingQueueList.add(new WaitingQueue(level + 1, 0, type[0], type[1], menu.value));
 				}
 			}
@@ -158,62 +154,47 @@ public class WaitingQueue {
 				type[0] = "치킨";
 
 				if (this.type.length > 1) {
-					if (this.type[1] == CHICKEN.KFC.value) {
-						type[1] = "KFC";
+					if (this.type[1] == CHICKEN.BBQ.value) {
+						type[1] = "BBQ";
 
 						if (this.type.length > 2) {
-							if (this.type[2] == KFC.후라이드.value)
-								type[2] = "후라이드";
-							else if (this.type[2] == KFC.양념.value)
+							if (this.type[2] == BBQ.시크릿양념치킨.value)
+								type[2] = "시크릿양념치킨";
+							else if (this.type[2] == BBQ.황금올리브치킨.value)
+								type[2] = "황금올리브치킨";
+						}
+					} else if (this.type[1] == CHICKEN.네네치킨.value) {
+						type[1] = "네네치킨";
+
+						if (this.type.length > 2) {
+							if (this.type[2] == NENE.양념.value)
 								type[2] = "양념";
-							else if (this.type[2] == KFC.스파이시.value)
-								type[2] = "스파이시";
+							else if (this.type[2] == NENE.힛블링.value)
+								type[2] = "힛블링";
 						}
-					} else if (this.type[1] == CHICKEN.네네.value) {
-						type[1] = "네네";
-
-						if (this.type.length > 2) {
-							if (this.type[2] == KYOCHON.후라이드.value)
-								type[2] = "후라이드";
-							else if (this.type[2] == KYOCHON.간장.value)
-								type[2] = "간장";
-							else if (this.type[2] == KYOCHON.핫.value)
-								type[2] = "핫";
-						}
-					} else if (this.type[1] == CHICKEN.교촌.value) {
-						type[1] = "교촌";
-
-						if (this.type.length > 2) {
-							if (this.type[2] == NENE.후라이드.value)
-								type[2] = "후라이드";
-							else if (this.type[2] == NENE.핫스파이시.value)
-								type[2] = "핫스파이시";
-							else if (this.type[2] == NENE.스노윙.value)
-								type[2] = "스노윙";
-						}
-					}
+					} 
 				}
 			} else if (this.type[0] == Category.피자.value) {
 				type[0] = "피자";
 
 				if (this.type.length > 1) {
-					if (this.type[1] == PIZZA.피자헛.value) {
-						type[1] = "피자헛";
+					if (this.type[1] == PIZZA.네오피자.value) {
+						type[1] = "네오피자";
 
 						if (this.type.length > 2) {
-							if (this.type[2] == PIZZAHUT.불고기.value)
-								type[2] = "불고기";
-							else if (this.type[2] == PIZZAHUT.콤비네이션.value)
-								type[2] = "콤비네이션";
+							if (this.type[2] == NEOPIZZA.불고기피자.value)
+								type[2] = "불고기피자";
+							else if (this.type[2] == NEOPIZZA.치즈바이트피자.value)
+								type[2] = "치즈바이트피자";
 						}
-					} else if (this.type[1] == PIZZA.미스터피자.value) {
-						type[1] = "미스터피자";
+					} else if (this.type[1] == PIZZA.피자빙고.value) {
+						type[1] = "피자빙고";
 
 						if (this.type.length > 2) {
-							if (this.type[2] == MISTERPIZZA.쉬림프.value)
-								type[2] = "쉬림프";
-							else if (this.type[2] == MISTERPIZZA.골드.value)
-								type[2] = "골드";
+							if (this.type[2] == PIZZABINGO.고구마피자.value)
+								type[2] = "고구마피자";
+							else if (this.type[2] == PIZZABINGO.페파로니피자.value)
+								type[2] = "페파로니피자";
 						}
 					}
 				}

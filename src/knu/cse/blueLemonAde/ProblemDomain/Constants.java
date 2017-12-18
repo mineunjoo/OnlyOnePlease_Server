@@ -17,8 +17,9 @@ public class Constants {
 	public final static int WAIT_MATCHING 	= 1;
 	public final static int TALKING 		= 2;
 	public final static int WAIT_SELECT 	= 3;
-	public final static int WAIT_PAY 		= 4;
-	public final static int WAIT_DELIVERY 	= 5;  
+	public final static int WAIT_CHECK		= 4;
+	public final static int WAIT_DEPOSIT	= 5;
+	public final static int WAIT_DELIVERY 	= 6;  
 
 	// order & delivery man state
 	public final static int WAITING 	= 1;
@@ -41,66 +42,76 @@ public class Constants {
 	 */
 	
 	public static enum CHICKEN {
-		KFC(0), 교촌(1), 네네(2);
+		BBQ(0, "BBQ"), 네네치킨(1, "네네치킨");
 		public int value;
+		public String str;
 		
-		CHICKEN(int value){
+		CHICKEN(int value, String str){
 			this.value = value;
+			this.str = str;
 		}
 	}
 
 	public static enum PIZZA {
-		피자헛(0), 미스터피자(1);
+		네오피자(0, "네오피자"), 피자빙고(1, "피자빙고");
 		public int value;
+		public String str;
 		
-		PIZZA(int value){
+		PIZZA(int value, String str){
 			this.value = value;
+			this.str = str;
 		}
 	}
 	
-	public static enum KFC {
-		스파이시(0), 후라이드(1), 양념(2);
+	public static enum BBQ {
+		황금올리브치킨(0, "황금올리브치킨", 16000), 시크릿양념치킨 (1, "시크릿양념치킨", 17000);
 		public int value;
+		public String str;
+		public int price;
 		
-		KFC(int value){
+		BBQ(int value,  String str, int price){
 			this.value = value;
+			this.str = str;
+			this.price = price;
 		}
 	}
-	
-	public static enum KYOCHON {
-		핫(0), 간장(1), 후라이드(2);
-		public int value;
-		
-		KYOCHON(int value){
-			this.value = value;
-		}
-	}
-	
+
 	public static enum NENE {
-		핫스파이시(0), 후라이드(1), 스노윙(2);
+		양념(0, "양념", 16000), 힛블링(1, "핫블링", 18000);
 		public int value;
+		public String str;
+		public int price;
 		
-		NENE(int value){
+		NENE(int value,  String str, int price){
 			this.value = value;
+			this.str = str;
+			this.price = price;
 		}
 	}
 
-
-	public static enum PIZZAHUT {
-		불고기(0), 콤비네이션(1);
+	public static enum NEOPIZZA {
+		불고기피자(0, "불고기피자", 13000), 치즈바이트피자(1, "치즈바이트피자", 18000);
 		public int value;
+		public String str;
+		public int price;
 		
-		PIZZAHUT(int value){
+		NEOPIZZA(int value,  String str, int price){
 			this.value = value;
+			this.str = str;
+			this.price = price;
 		}
 	}
 	
-	public static enum MISTERPIZZA {
-		쉬림프(0), 골드(1);
+	public static enum PIZZABINGO {
+		고구마피자 (0, "고구마피자", 10000), 페파로니피자 (1, "페파로니피자", 8000);
 		public int value;
+		public String str;
+		public int price;
 		
-		MISTERPIZZA(int value){
+		PIZZABINGO(int value,  String str, int price){
 			this.value = value;
+			this.str = str;
+			this.price = price;
 		}
 	}
 }

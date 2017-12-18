@@ -15,8 +15,8 @@ public class Client
 
 	public Client(String host, int port)
 	{
-		cControl=new ClientControl();
-		try {
+		cControl = new ClientControl(this);
+		try { 
 			System.out.println("-----클라이언트가 실행되었습니다.");
 			sock = new Socket(host, port);
 
@@ -24,7 +24,8 @@ public class Client
 			e.printStackTrace();
 		} 
 
-		clientW=new clientWrite(sock);
+		// TO-DO cControl 없애야함.
+		clientW=new clientWrite(sock, cControl);
 		clientR=new clientRead(sock,cControl);
 		clientW.start();
 		clientR.start();
@@ -51,6 +52,7 @@ class clientRead extends Thread//서버로 부터 메세지 받기.
 		this.socket=socket;
 		this.cControl=cControl;
 	}
+	
 	public void run()
 	{
 		try {
@@ -64,6 +66,16 @@ class clientRead extends Thread//서버로 부터 메세지 받기.
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				while(cControl.getSList().size() > 0) {
+					cControl.handleMsg(cControl.getSList().get(0));
+				}
+				while(cControl.getCList().size() > 0) {
+					if(cControl.getUserState() == ClientConstants.CHATTING)
+						System.out.println(cControl.getCList().get(0));
+					else
+						cControl.getCList().clear();
+				}
+				
 				temp = clientInputStream.readObject();
 				
 				if(temp instanceof String)
@@ -103,14 +115,18 @@ class clientWrite extends Thread//서버로 메세지 보내기
 	private Socket socket;
 	private String console;
 	
+	// TO-DO 테스트용임 나중에 없애야함.
+	private ClientControl cControl;
+	
 	private boolean sendToReadyString;
 	
 	private Scanner scanner;
 	private String temp;
 	
-	public clientWrite(Socket socket)
+	public clientWrite(Socket socket, ClientControl cControl)
 	{
 		this.socket=socket;
+		this.cControl = cControl;
 		sendToReadyString=false;
 		
 		scanner = new Scanner(System.in);
@@ -125,6 +141,10 @@ class clientWrite extends Thread//서버로 메세지 보내기
 			while (true) //&전체 thread의 반복문
 			{			
 				temp = scanner.nextLine();
+				
+				if(temp.startsWith("#cmd%search"))
+					cControl.setUserState(ClientConstants.WAIT_MATCHING);
+				
 				sendToServer(temp);
 				
 				try {
@@ -157,6 +177,7 @@ class clientWrite extends Thread//서버로 메세지 보내기
 			}
 		}
 	}
+	
 	public void sendToServer(String msg)
 	{
 		console=msg;

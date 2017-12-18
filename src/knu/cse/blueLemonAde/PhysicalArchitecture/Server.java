@@ -6,6 +6,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import knu.cse.blueLemonAde.Foundation.OrderList;
 import knu.cse.blueLemonAde.Foundation.RoomList;
 import knu.cse.blueLemonAde.Foundation.WaitingQueue;
 import knu.cse.blueLemonAde.ProblemDomain.Constants;
@@ -25,13 +27,13 @@ public class Server {
 	private static ArrayList<UserThread> userClientList; // 연결된 주문 배달 앱 사용자
 															// 클라이언트 리스트
 	private static ArrayList<DeliveryManThread> deliveryManClientList; // 연결된
-																		// 배달원
-																		// 클라이언트
-																		// 리스트
-
+								
+	// 배달원
 	private RoomList roomList; // 현재 만들어진 방
 	private WaitingQueue waitingQueue; // 매칭 대기열 큐
 
+	private OrderList orderList; // 주문 리스트
+	
 	private UserAcceptThread userAccept; // 사용자 클라이언트 accept 스레드
 	private DeliveryManAcceptThread deliveryManAccept; // 배달원 클라이언트 accept 스레드
 
@@ -205,7 +207,7 @@ public class Server {
 					if (temp instanceof String) {
 						line = (String) temp;
 						System.out.println("-----send String message to server : " + line);
-						serverConsole.handleMeg(line);
+						serverConsole.handleMsg(line);
 					}
 				}
 
@@ -276,7 +278,7 @@ public class Server {
 					if (temp instanceof String) {
 						line = (String) temp;
 						System.out.println("-----send String message to server : " + line);
-						serverConsole.handleMeg(line);
+						serverConsole.handleMsg(line);
 					}
 				}
 

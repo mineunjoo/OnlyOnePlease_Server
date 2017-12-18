@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import knu.cse.blueLemonAde.Foundation.RoomList;
 import knu.cse.blueLemonAde.PhysicalArchitecture.Server.UserThread;
 import knu.cse.blueLemonAde.ProblemDomain.Constants;
+import knu.cse.blueLemonAde.ProblemDomain.Order;
 import knu.cse.blueLemonAde.ProblemDomain.Room;
+import knu.cse.blueLemonAde.Test.UserClientStart;
 
 public class ServerConsole {
 
@@ -21,7 +23,8 @@ public class ServerConsole {
 	private int userState = Constants.NONE;
 	private int orderState = Constants.NONE;
 
-	private Room room;
+	private Room room = null;
+	private Order order = null;
 
 	public ServerConsole(Server server, ObjectOutputStream objOutput, int userID) {
 		this.server = server;
@@ -29,22 +32,27 @@ public class ServerConsole {
 		this.userID = userID;
 	}
 
-	public void handleMeg(String msg) {
+	public void handleMsg(String msg) {
 		System.out.println("받은 메시지 : " + msg);
-
-		if (msg.startsWith("#cmd%search")) {//
+		if (msg.startsWith("#cmd%start")) {//
+			start(msg);
+		} else if (msg.startsWith("#cmd%search")) {//
+			search(msg);
+		} else if (msg.startsWith("#cmd%makeroom")) {//
+			msg = msg.substring(12);
+			msg = "#cmd%search%" + msg;
 			search(msg);
 		} else if (msg.startsWith("#cmd%showroomList")) {//
 			showRoomList(msg);
 		} else if (msg.startsWith("#cmd%entrance")) {
 			entrance(msg);
 		} else if (msg.startsWith("#cmd%selectmenu")) {
-
+			
 		} else if (msg.startsWith("#cmd%checkmenu")) {
 
 		} else if (msg.startsWith("#cmd%checkdeposit")) {
 
-		} else if (msg.startsWith("#cmd%complete")) {
+		} else if (msg.startsWith("#cmd%ordertrace")) {
 
 		} else if (msg.startsWith("#cmd%complete")) {
 
@@ -55,13 +63,18 @@ public class ServerConsole {
 
 	// ----------------function------------//
 
+	private void start(String msg) {
+		// TODO 저장된 위도경도랑 거리 비교하기
+		sendToClientString("#cmd%fin");
+	}
+	
 	private void search(String msg) {
 
 		userState = Constants.WAIT_MATCHING;
 		
 		int[] param = null;
 
-		if (msg.length() > 11) {
+		if (msg.length() > 12) {
 			msg = msg.substring(12);
 			String[] token = msg.split("%");
 
@@ -79,15 +92,17 @@ public class ServerConsole {
 		}
 
 		if (otherUserID >= 0) {
-			server.getWaitingQueue().poll(otherUserID,
-					server.getUserClientList().get(otherUserID).getServerConsole().room.getTypeIDs());
-			server.getRoomList().removeRoom(otherUserID);
+		//	server.getWaitingQueue().poll(otherUserID,
+		//			server.getUserClientList().get(otherUserID).getServerConsole().room.getTypeIDs());
+		//	server.getRoomList().removeRoom(otherUserID);
 
 			/*
 			 * TODO create chatting room func createChattingRoom(int userID, int
 			 * otherUserID);
 			 */
 			sendToClientString("#cmd%fin%" + otherUserID);
+			server.getUserClientList().get(otherUserID).getServerConsole().sendToClientString("#cmd%fin%" + userID);
+			
 		} else {
 			if (param != null)
 				room = new Room(server.getRoomList().getRoomList().size(), userID, param);
@@ -97,8 +112,6 @@ public class ServerConsole {
 			server.getRoomList().addRoom(room);
 
 			sendToClientString("#cmd%fail%" + room.getRoomNum());
-
-			userState = Constants.TALKING;
 		}
 	}
 
@@ -118,40 +131,60 @@ public class ServerConsole {
 		else
 			sendToClientObject(server.getRoomList().getRoomList());
 	}
-
+	
 	private void entrance(String msg){
-		msg = msg.substring(9);
+		userState = ClientConstants.ENTRANCE;
 		
-		String[] token = msg.split("%");
-		int roomNumber =  Integer.parseInt(token[0]);
-		
-		for(Room room : server.getRoomList().getRoomList())
-			if(room.getRoomNum() == roomNumber){
-				otherUserID = room.getUserID();
-				
-				if(userState == Constants.NONE){
-					server.getRoomList().removeRoom(room);
-					server.getWaitingQueue().poll(roomNumber, room.getTypeIDs());
-				}
-				
-				break;
+		if(room != null) {
+			String temp = "";
+			
+			for(int type : room.getTypeIDs()) {
+				temp += "%";
+				temp += type;
 			}
+			
+			server.getWaitingQueue().poll(userID, room.getTypeIDs());
+			server.getRoomList().removeRoom(userID);
+			
+			server.getUserClientList().get(otherUserID).getServerConsole().sendToClientString("#cmd%fin" + temp);
+		}
 		
-		for(UserThread otherClient : server.getUserClientList())
-			if(otherClient.getServerConsole().userID == otherUserID){
-				if(otherClient.getServerConsole().userState == Constants.WAIT_MATCHING){
-					otherClient.getServerConsole().otherUserID = userID;
-					otherClient.getServerConsole().userState = Constants.TALKING;
-					otherClient.getServerConsole().sendToClientString("#cmd%matching%fin");
-				}
-				break;
-			}
+		userState = ClientConstants.CHATTING;
 		
 		sendToClientString("#cmd%fin");
-		
-		userState = Constants.TALKING;
 	}
 	
+	private void selectMenu(String msg) {
+		
+		msg = msg.substring(12);
+		String[] token = msg.split("%");
+
+		if(token.length < 3) {
+			System.out.println("wrong param in select menu message");
+			sendToClientString("#cmd%err");
+			return;
+		}
+		
+		int[] param = new int[token.length];
+
+		for (int i = 0; i < token.length; i++) {
+			param[i] = Integer.parseInt(token[i]);
+		}
+		sendToClientString("#cmd%fin");
+		
+		userState = Constants.WAIT_SELECT;
+		
+		for(UserThread userThread : server.getUserClientList()) {
+			if(userThread.getUserid() == otherUserID) {
+				userThread.getServerConsole().sendToClientString("#cmd%selectedmenu");
+			}
+		}
+			
+	}
+	
+	/*
+	 * 
+	 */
 	private void sendToClientString(String line) {
 		try {
 			objOutput.writeObject(line);
