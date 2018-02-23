@@ -28,7 +28,7 @@ public class WaitingQueue {
 	// recursive constructor. create all type waiting queue in tree format
 	public WaitingQueue(int level, int... is) {
 		this.level = level;
-
+		
 		if (level > 0) {
 			type = new int[level];
 
@@ -212,8 +212,6 @@ public class WaitingQueue {
 					temp += " / menu : " + type[2];
 			}
 		}
-
 		return "WaitingQueue [level=" + level + temp + ", waitingQueue=" + waitingQueue + "]";
 	}
-
 }

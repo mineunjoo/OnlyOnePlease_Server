@@ -27,6 +27,7 @@ public class ClientControl {
 	public int getUserState() {
 		return userState;
 	}
+	
 
 	public void addString(String string)
 	{

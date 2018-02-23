@@ -24,11 +24,9 @@ public class Server {
 	private static int userNumber = 0;
 	private static int deliveryManNumber = 0;
 
-	private static ArrayList<UserThread> userClientList; // 연결된 주문 배달 앱 사용자
-															// 클라이언트 리스트
-	private static ArrayList<DeliveryManThread> deliveryManClientList; // 연결된
-								
-	// 배달원
+	private static ArrayList<UserThread> userClientList; // 연결된 주문 배달 앱 사용자 클라이언트 리스트
+	private static ArrayList<DeliveryManThread> deliveryManClientList; // 연결된 배달원 리스트
+	
 	private RoomList roomList; // 현재 만들어진 방
 	private WaitingQueue waitingQueue; // 매칭 대기열 큐
 

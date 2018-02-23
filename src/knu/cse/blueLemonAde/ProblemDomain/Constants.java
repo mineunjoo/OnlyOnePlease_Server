@@ -7,10 +7,11 @@ package knu.cse.blueLemonAde.ProblemDomain;
 public class Constants {
 	// TODO Category survey required.
 	// waitingQueue level
-	public final static int TOP = 0;
-	public final static int CATEGORY = 1;
-	public final static int BRAND = 2;
-	public final static int MENU = 3;
+	public final static int TOP 		= 0;
+	public final static int CATEGORY 	= 1;
+	public final static int BRAND 		= 2;
+	public final static int MENU 		= 3;
+	
 	
 	// user state
 	public final static int NONE 			= 0;	// order & delivery also use this 
@@ -20,7 +21,8 @@ public class Constants {
 	public final static int WAIT_CHECK		= 4;
 	public final static int WAIT_DEPOSIT	= 5;
 	public final static int WAIT_DELIVERY 	= 6;  
-
+	
+	
 	// order & delivery man state
 	public final static int WAITING 	= 1;
 	public final static int DELIVERYING = 2;
